@@ -1,13 +1,16 @@
 package com.ExamenMercadoLibre.Mutant.Service;
 
-import com.ExamenMercadoLibre.Mutant.Entidades.EnumDirection;
+import com.ExamenMercadoLibre.Mutant.Model.EnumDirection;
 import com.ExamenMercadoLibre.Mutant.Excepcion.IncorrectNitrogenBaseException;
 import com.ExamenMercadoLibre.Mutant.Excepcion.InvalidDataReceivedException;
 import com.ExamenMercadoLibre.Mutant.Excepcion.ServiceMutantException;
+import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
-
+@Service
 public class DnaAnalyzeServiceImpl  implements  DnaAnalyzeService{
+
+
 
     private char[][] matrixDna;
     private int sequenceCount = 0;
@@ -21,8 +24,9 @@ public class DnaAnalyzeServiceImpl  implements  DnaAnalyzeService{
 
             matrixDna = ProcessDna(dna);
             boolean isMutant = analyzeDNA();
+
             return isMutant;
-            //return analyzeDNA();
+
         } catch (InvalidDataReceivedException ex) {
             throw new InvalidDataReceivedException(ex.getMessage());
         } catch (IncorrectNitrogenBaseException ex) {
@@ -56,7 +60,6 @@ public class DnaAnalyzeServiceImpl  implements  DnaAnalyzeService{
 
     private char[][] ProcessDna(String[] dna) throws ServiceMutantException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
         try {
-
             int dnaSequenceLength = dna.length;
             if (dnaSequenceLength == 0) {
                 throw new InvalidDataReceivedException("Secuencia Vacia");
@@ -74,7 +77,6 @@ public class DnaAnalyzeServiceImpl  implements  DnaAnalyzeService{
                     matrixDna[position] = dna[position].toUpperCase().toCharArray();
                 }
             }
-
             return matrixDna;
 
         } catch (InvalidDataReceivedException ex) {

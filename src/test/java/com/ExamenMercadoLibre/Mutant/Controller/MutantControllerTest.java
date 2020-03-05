@@ -1,23 +1,19 @@
 package com.ExamenMercadoLibre.Mutant.Controller;
 
-import com.ExamenMercadoLibre.Mutant.Entidades.DnaEntity;
-import com.ExamenMercadoLibre.Mutant.Entidades.ResponseDTO;
+import com.ExamenMercadoLibre.Mutant.Model.DnaSequence;
 import com.ExamenMercadoLibre.Mutant.Excepcion.IncorrectNitrogenBaseException;
 import com.ExamenMercadoLibre.Mutant.Excepcion.InvalidDataReceivedException;
 import com.ExamenMercadoLibre.Mutant.Excepcion.ServiceMutantException;
-import com.ExamenMercadoLibre.Mutant.Service.MutantService;
+import com.ExamenMercadoLibre.Mutant.Service.MutantServiceImpl;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import org.json.JSONObject;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -37,7 +33,7 @@ public class MutantControllerTest {
     private MutantController mutantControllerTest;
 
     @Mock
-    private MutantService mockMutantservice;
+    private MutantServiceImpl mockMutantservice;
 
     private String[] dnaMutant = new String[]{"ATGCGA", "CAGTGC", "TTATGG", "AGAAGG", "CCCGTA", "TCGCTG"};
     private String[] dnaHuman = new String[]{"ATGCCA", "CAGTGC", "TTCTGG", "AGAAGG", "CCCGTA", "TCGCTG"};
@@ -57,7 +53,7 @@ public class MutantControllerTest {
     public void testDnaIsMutant() throws Exception {
 
         mockIsMutantService(dnaMutant, true);
-        DnaEntity dna = new DnaEntity();
+        DnaSequence dna = new DnaSequence();
         dna.setDna(dnaMutant);
 
         ResultActions resultActions = mockMvc.perform(post(URI).contentType(MediaType.APPLICATION_JSON).content(gson.toJson(dna)));
@@ -78,7 +74,7 @@ public class MutantControllerTest {
         Mockito.doThrow(new InvalidDataReceivedException("any message")).when(mockMutantservice).isMutant(invalidDNA_InvalidLength);
 
 
-        DnaEntity dna = new DnaEntity();
+        DnaSequence dna = new DnaSequence();
         dna.setDna(invalidDNA_InvalidLength);
         ResultActions resultActions = mockMvc.perform(post(URI).contentType(MediaType.APPLICATION_JSON).content(gson.toJson(dna)));
         MvcResult result = resultActions.andExpect(status().isInternalServerError()).andReturn();
@@ -93,7 +89,7 @@ public class MutantControllerTest {
     public void testDnaIsHuman() throws Exception {
 
         mockIsMutantService(dnaHuman, false);
-        DnaEntity dna = new DnaEntity();
+        DnaSequence dna = new DnaSequence();
         dna.setDna(dnaHuman);
 
         ResultActions resultActions = mockMvc.perform(post(URI)

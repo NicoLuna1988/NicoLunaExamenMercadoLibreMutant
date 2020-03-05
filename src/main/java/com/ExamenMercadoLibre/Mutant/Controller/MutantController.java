@@ -1,8 +1,8 @@
 package com.ExamenMercadoLibre.Mutant.Controller;
 
-import com.ExamenMercadoLibre.Mutant.Entidades.DnaEntity;
-import com.ExamenMercadoLibre.Mutant.Entidades.EnumErrorCode;
-import com.ExamenMercadoLibre.Mutant.Entidades.ResponseDTO;
+import com.ExamenMercadoLibre.Mutant.Model.DnaSequence;
+import com.ExamenMercadoLibre.Mutant.Model.EnumErrorCode;
+import com.ExamenMercadoLibre.Mutant.Model.ResponseDTO;
 import com.ExamenMercadoLibre.Mutant.Excepcion.IncorrectNitrogenBaseException;
 import com.ExamenMercadoLibre.Mutant.Excepcion.InvalidDataReceivedException;
 import com.ExamenMercadoLibre.Mutant.Excepcion.ServiceMutantException;
@@ -10,22 +10,23 @@ import com.ExamenMercadoLibre.Mutant.Service.MutantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-
-
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@CrossOrigin
 public class MutantController {
     @Autowired
     private MutantService mutantsService;
 
+    // autowiring user repository
+
+ @GetMapping(value="status")
+    String checkStatus(){
+     return  "ok";
+ }
     @RequestMapping(value = "/mutant", method = RequestMethod.POST)
-    public ResponseEntity<ResponseDTO> mutant(@RequestBody DnaEntity dna) {
+    public ResponseEntity<ResponseDTO> mutant(@RequestBody DnaSequence dna) {
         ResponseDTO responseDTO=new ResponseDTO();
         ResponseEntity<ResponseDTO> responseEntity;
         boolean isMutant;
@@ -77,5 +78,8 @@ public class MutantController {
     }
 
 
+
+
 }
+
 

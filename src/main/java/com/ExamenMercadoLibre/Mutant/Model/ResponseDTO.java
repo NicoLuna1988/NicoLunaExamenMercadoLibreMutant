@@ -1,4 +1,4 @@
-package com.ExamenMercadoLibre.Mutant.Entidades;
+package com.ExamenMercadoLibre.Mutant.Model;
 
 public class ResponseDTO {
     private int ErrorCode;

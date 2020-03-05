@@ -1,11 +1,11 @@
-package com.ExamenMercadoLibre.Mutant.Entidades;
+package com.ExamenMercadoLibre.Mutant.Model;
 
-public class DnaEntity {
+public class DnaSequence {
     private String[] dna;
-    public DnaEntity() {
+    public DnaSequence() {
 
     }
-    public DnaEntity(String[] dna) {
+    public DnaSequence(String[] dna) {
         this.dna = dna;
     }
 
