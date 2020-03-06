@@ -1,14 +1,16 @@
 package com.ExamenMercadoLibre.Mutant.Model;
 
 
+import java.math.BigDecimal;
+
 public class Stats{
     private long count_mutant_dna;
     private long count_human_dna;
-    private double ratio;
+    private BigDecimal ratio;
     public Stats() {
 
     }
-    public Stats(long mutants, long humans, double ratio) {
+    public Stats(long mutants, long humans, BigDecimal ratio) {
         this.count_mutant_dna = mutants;
         this.count_human_dna = humans;
         this.ratio = ratio;
@@ -30,11 +32,11 @@ public class Stats{
         this.count_human_dna = count_human_dna;
     }
 
-    public double getRatio() {
+    public BigDecimal getRatio() {
         return ratio;
     }
 
-    public void setRatio(double ratio) {
+    public void setRatio(BigDecimal ratio) {
         this.ratio = ratio;
     }
 
