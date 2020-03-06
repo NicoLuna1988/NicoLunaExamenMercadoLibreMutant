@@ -1,19 +1,17 @@
 package com.ExamenMercadoLibre.Mutant.Service;
 
+import com.ExamenMercadoLibre.Mutant.DbData.DnaDaoImpl;
 import com.ExamenMercadoLibre.Mutant.Excepcion.IncorrectNitrogenBaseException;
 import com.ExamenMercadoLibre.Mutant.Excepcion.InvalidDataReceivedException;
-import com.ExamenMercadoLibre.Mutant.Excepcion.ServiceMutantException;
+import com.ExamenMercadoLibre.Mutant.Excepcion.ServiceException;
 import junit.framework.TestCase;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -32,70 +30,62 @@ public class MutantServiceTest {
     private String[] invalidDNA_Empy = new String[]{};
 
     @InjectMocks
-    private MutantServiceImpl service;
+    private MutantServiceImpl MockMutantService; //Dependent
 
-    //@Mock
-    //private DBServiceDAOImpl dao;
+    @Mock
+    private DnaDaoImpl dao; //Dependence
 
-    @Ignore("not yet ready , Please ignore.")
     @Test
-    public void testIsMutant_Mutant() throws ServiceMutantException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
+    public void testIsMutant_Mutant() throws ServiceException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
 
-        boolean result = service.isMutant(dnaMutant);
+        boolean result = MockMutantService.isMutant(dnaMutant);
 
         TestCase.assertTrue(result);
     }
-    @Ignore("not yet ready , Please ignore.")
+
     @Test
-    public void testIsMutant_Human() throws ServiceMutantException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
+    public void testIsMutant_Human() throws ServiceException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
 
-        // GIVEN a dna of a mutant subject
-//            String[] dna = dnaMutant1;
-//            Mutant mutant = new Mutant(dna);
-//            Mockito.doNothing().when(dao).insert(Mockito.eq(mutant));
+        boolean result = MockMutantService.isMutant(dnaHuman);
 
-        // WHEN is mutant service is executed
-        boolean result = service.isMutant(dnaHuman);
-
-        // THEN the return is true
-        TestCase.assertTrue(result == false);
+        TestCase.assertFalse(result);
     }
 
     @Test
-    public void testIsMutant_invalidDNA_InvalidLength() throws ServiceMutantException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
+    public void testIsMutant_invalidDNA_InvalidLength() throws ServiceException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
         boolean ExInvalidDataReceivedException = false;
         try {
-            boolean result = service.isMutant(invalidDNA_InvalidLength);
+            boolean result = MockMutantService.isMutant(invalidDNA_InvalidLength);
         } catch (InvalidDataReceivedException ex) {
             ExInvalidDataReceivedException = true;
         }
         TestCase.assertTrue(ExInvalidDataReceivedException == true);
     }
     @Test
-    public void testIsMutant_invalidDNA_InvalidNitrogenBase() throws ServiceMutantException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
+    public void testIsMutant_invalidDNA_InvalidNitrogenBase() throws ServiceException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
         boolean ExIncorrectNitrogenBaseException = false;
         try {
-            boolean result = service.isMutant(invalidDNA_InvalidNitrogenBase);
+            boolean result = MockMutantService.isMutant(invalidDNA_InvalidNitrogenBase);
         } catch (IncorrectNitrogenBaseException ex) {
             ExIncorrectNitrogenBaseException = true;
         }
         TestCase.assertTrue(ExIncorrectNitrogenBaseException == true);
     }
     @Test
-    public void testIsMutant_invalidDNA_InvalidLength2() throws ServiceMutantException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
+    public void testIsMutant_invalidDNA_InvalidLength2() throws ServiceException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
         boolean ExInvalidDataReceivedException = false;
         try {
-            boolean result = service.isMutant(invalidDNA_InvalidLength2);
+            boolean result = MockMutantService.isMutant(invalidDNA_InvalidLength2);
         } catch (InvalidDataReceivedException ex) {
             ExInvalidDataReceivedException = true;
         }
         TestCase.assertTrue(ExInvalidDataReceivedException == true);
     }
     @Test
-    public void testIsMutant_invalidDNA_invalidDNA_Empy() throws ServiceMutantException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
+    public void testIsMutant_invalidDNA_invalidDNA_Empy() throws ServiceException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
         boolean ExInvalidDataReceivedException = false;
         try {
-            boolean result = service.isMutant(invalidDNA_Empy);
+            boolean result = MockMutantService.isMutant(invalidDNA_Empy);
         } catch (InvalidDataReceivedException ex) {
             ExInvalidDataReceivedException = true;
         }

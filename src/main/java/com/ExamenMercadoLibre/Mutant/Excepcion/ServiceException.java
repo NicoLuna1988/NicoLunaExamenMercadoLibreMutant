@@ -1,10 +1,10 @@
 package com.ExamenMercadoLibre.Mutant.Excepcion;
 
-public class ServiceMutantException extends Exception {
+public class ServiceException extends Exception {
 
     private String message;
 
-    public ServiceMutantException(String message) {
+    public ServiceException(String message) {
         this.message = message;
     }
 

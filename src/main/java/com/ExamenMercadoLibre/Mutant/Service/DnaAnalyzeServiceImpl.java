@@ -3,23 +3,32 @@ package com.ExamenMercadoLibre.Mutant.Service;
 import com.ExamenMercadoLibre.Mutant.Model.EnumDirection;
 import com.ExamenMercadoLibre.Mutant.Excepcion.IncorrectNitrogenBaseException;
 import com.ExamenMercadoLibre.Mutant.Excepcion.InvalidDataReceivedException;
-import com.ExamenMercadoLibre.Mutant.Excepcion.ServiceMutantException;
+import com.ExamenMercadoLibre.Mutant.Excepcion.ServiceException;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
 @Service
 public class DnaAnalyzeServiceImpl  implements  DnaAnalyzeService{
 
-
-
     private char[][] matrixDna;
     private int sequenceCount = 0;
     private char lastNitrogenBase;
-    //Setting Properties
+
+    /**
+     * Setting Properties
+     * CantSameSequenceMinToMutant is the number of times the pattern has to be repeated to determine that it belongs to a mutant
+     * CantNitrogenBaseToMutant it is the amount of nitrogen bases that have to be repeated to form the pattern
+     */
     private int CantSameSequenceMinToMutant = 2;
     private int CantNitrogenBaseToMutant = 4;
 
-    public boolean isMutant(String[] dna) throws IncorrectNitrogenBaseException, ServiceMutantException, InvalidDataReceivedException {
+
+    /**
+     * Method that analyzes the DNA sequence
+     * @param dna String[]
+     * @return boolean True(Mutant) / false (Human)
+     */
+    public boolean isMutant(String[] dna) throws IncorrectNitrogenBaseException, ServiceException, InvalidDataReceivedException {
         try {
 
             matrixDna = ProcessDna(dna);
@@ -32,23 +41,27 @@ public class DnaAnalyzeServiceImpl  implements  DnaAnalyzeService{
         } catch (IncorrectNitrogenBaseException ex) {
             throw new IncorrectNitrogenBaseException(ex.getMessage());
         } catch (Exception ex) {
-            throw new ServiceMutantException(ex.getMessage());
+            throw new ServiceException(ex.getMessage());
         }
     }
 
+    /**
+     * function that runs the path in all directions of the DNA sequence matrix in search of the pattern that determines whether it is mutant or not
+     * @return boolean True(Mutant) / false (Human)
+     */
     private boolean analyzeDNA() {
 
         if (AnalyzeHorizontalDna(matrixDna)) {
             return true;
-        } else if (AnalyzeVerticalDna(matrixDna)) {
+        } else if (AnalyzeVerticalDna(matrixDna)) { //vertical and horizontal sequences
             return true;
-        } else if (AnalyzeBottomDiagonalsFromLeft(matrixDna)) { //diagonales por debajo de la diagonal principal
+        } else if (AnalyzeBottomDiagonalsFromLeft(matrixDna)) { //diagonals below the main diagonal from the left
             return true;
-        } else if (AnalyzeTopDiagonalsFromLeft(matrixDna)) { //diagonales por arriva de la diagonal principal (incluyendola)
+        } else if (AnalyzeTopDiagonalsFromLeft(matrixDna)) { //diagonals above the main diagonal (including it) from the left
             return true;
-        } else if (AnalyzeBottomSecondaryDiagonalsFromRight(matrixDna)) { //diagonales por debajo de la diagonal secundaria
+        } else if (AnalyzeBottomSecondaryDiagonalsFromRight(matrixDna)) { //diagonals below the secondary diagonal from the right
             return true;
-        } else if (AnalyzeTopSecondaryDiagonalsFromRight(matrixDna)) {
+        } else if (AnalyzeTopSecondaryDiagonalsFromRight(matrixDna)) { //diagonals above the secondary diagonal from the right
             return true;
         } else {
             return false;
@@ -57,22 +70,25 @@ public class DnaAnalyzeServiceImpl  implements  DnaAnalyzeService{
 
     }
 
-
-    private char[][] ProcessDna(String[] dna) throws ServiceMutantException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
+    /**
+     * Function that validates the DNA sequence and assembles the matrix to analyze
+     * @return char[][] matrixDna
+     */
+    private char[][] ProcessDna(String[] dna) throws ServiceException, InvalidDataReceivedException, IncorrectNitrogenBaseException {
         try {
             int dnaSequenceLength = dna.length;
             if (dnaSequenceLength == 0) {
-                throw new InvalidDataReceivedException("Secuencia Vacia");
+                throw new InvalidDataReceivedException("Empty Sequence");
             }
             Pattern pattern = Pattern.compile("[acgt]+", Pattern.CASE_INSENSITIVE);
             matrixDna = new char[dnaSequenceLength][dnaSequenceLength];
             for (int position = 0; position < dnaSequenceLength; position++) {
                 if (dna[position].length() < 4) {
-                    throw new InvalidDataReceivedException("no tiene los cartacteres minimos para determinar si es mutante o humano");
+                    throw new InvalidDataReceivedException("It does not have the minimum characters to determine if it is mutant or human");
                 } else if (dna[position].length() != dnaSequenceLength) {
-                    throw new InvalidDataReceivedException("El tamaño bases nitrogendas de la secuencia no coincide con el total de secuencias");
+                    throw new InvalidDataReceivedException("The nitrogen base size of the sequence does not match the total sequences");
                 } else if (!pattern.matcher(dna[position]).matches()) {
-                    throw new IncorrectNitrogenBaseException("EL Dna contiene una base nnitrogenada no valida");
+                    throw new IncorrectNitrogenBaseException("DNA contains an invalid nitrogen base");
                 } else {
                     matrixDna[position] = dna[position].toUpperCase().toCharArray();
                 }
@@ -84,7 +100,7 @@ public class DnaAnalyzeServiceImpl  implements  DnaAnalyzeService{
         } catch (IncorrectNitrogenBaseException ex) {
             throw new IncorrectNitrogenBaseException(ex.getMessage());
         } catch (Exception ex) {
-            throw new ServiceMutantException(ex.getMessage());
+            throw new ServiceException(ex.getMessage());
         }
 
     }

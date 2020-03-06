@@ -1,10 +1,10 @@
 package com.ExamenMercadoLibre.Mutant.DbData;
 
-import com.ExamenMercadoLibre.Mutant.Excepcion.ServiceMutantException;
+import com.ExamenMercadoLibre.Mutant.Excepcion.ServiceException;
 
 public interface DnaDao {
-     boolean InsertDnaSequence(String DnaSequence, boolean isMutant) throws ServiceMutantException;
-     boolean ExistDnaSequence(String DnaSequence) throws ServiceMutantException;
-     int getDnaHumanCount() throws ServiceMutantException;
-     int getDnaMutantCount() throws ServiceMutantException;
+     boolean InsertDnaSequence(String DnaSequence, boolean isMutant) throws ServiceException;
+     boolean ExistDnaSequence(String DnaSequence) throws ServiceException;
+     int getDnaHumanCount() throws ServiceException;
+     int getDnaMutantCount() throws ServiceException;
 }

@@ -1,6 +1,6 @@
 package com.ExamenMercadoLibre.Mutant.DbData;
 
-import com.ExamenMercadoLibre.Mutant.Excepcion.ServiceMutantException;
+import com.ExamenMercadoLibre.Mutant.Excepcion.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -17,44 +17,60 @@ public class DnaDaoImpl implements DnaDao {
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public boolean InsertDnaSequence(String DnaSequence, boolean isMutant) throws ServiceMutantException {
+    /**
+     * method that inserts the DNA sequence into the database
+     * @Params DnaSequence String
+     * @Params isMutant boolean
+     * @return boolean
+     */
+    public boolean InsertDnaSequence(String DnaSequence, boolean isMutant) throws ServiceException {
         try {
             Integer result = jdbcTemplate.update("INSERT INTO Dna (DnaSequence, IsMutant) VALUES (?, ?)", DnaSequence, isMutant);
             return result != null && result > 0;
-        } catch (Exception ex) {
-            throw new ServiceMutantException(ex.getMessage());
         }
-
+        catch (Exception ex) {
+            throw new ServiceException(ex.getMessage());
+        }
     }
-
+    /**
+     * Method that looks for the existence of a DNA sequence in the database
+     * @Params DnaSequence String
+     * @return boolean
+     */
     @Override
-    public boolean ExistDnaSequence(String DnaSequence) throws ServiceMutantException {
+    public boolean ExistDnaSequence(String DnaSequence) throws ServiceException {
         try {
             Integer result = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Dna WHERE DnaSequence = ?", new Object[]{DnaSequence}, Integer.class);
             return result != null && result > 0;
         } catch (Exception ex) {
-            throw new ServiceMutantException(ex.getMessage());
+            throw new ServiceException(ex.getMessage());
         }
     }
-
+    /**
+     * Method that returns the amount of mutants
+     * @return int
+     */
     @Override
-    public int getDnaHumanCount() throws ServiceMutantException {
+    public int getDnaHumanCount() throws ServiceException {
         try {
             Integer result = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Dna WHERE IsMutant=false;", Integer.class);
 
             return result;
         } catch (Exception ex) {
-            throw new ServiceMutantException(ex.getMessage());
+            throw new ServiceException(ex.getMessage());
         }
     }
-
+    /**
+     * Method that returns the amount of mutants
+     * @return int
+     */
     @Override
-    public int getDnaMutantCount() throws ServiceMutantException {
+    public int getDnaMutantCount() throws ServiceException {
         try {
             Integer result = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Dna WHERE IsMutant=true;", Integer.class);
             return result;
         } catch (Exception ex) {
-            throw new ServiceMutantException(ex.getMessage());
+            throw new ServiceException(ex.getMessage());
         }
     }
 
